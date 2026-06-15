@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import {FormGroup,FormControl, ReactiveFormsModule} from '@angular/forms';
+import {FormGroup,FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import { inject } from '@angular/core';
 import { TaskService } from '../task-service';
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import path from 'path';
 
 @Component({
   selector: 'app-task-form',
@@ -14,14 +15,42 @@ export class TaskForm {
 
   private taskService = inject(TaskService);
   private router = inject(Router);
+   
+  private route = inject(ActivatedRoute);
+  private id = this.route.snapshot.paramMap.get("id");
 
   form = new FormGroup({
-    title: new FormControl(""),
-    description: new FormControl(""),
+    title: new FormControl("",[Validators.required]),
+    description: new FormControl("",[Validators.minLength(3)]),
   });
 
+  constructor() {
+    if(this.id) {
+      this.form.patchValue(this.taskService.getTask(this.id));
+    }
+  }
+
   submit() {
-    this.taskService.addTask(this.form.value);
+
+        if (this.form.invalid) {
+      console.log("Your form is invalid. Please check the fields.");
+      console.log("Your Form: ", this.form.value);
+      console.log("Title Errors: ", this.form.controls.title.errors);
+      console.log("Description Errors: ",this.form.controls.description.errors);
+
+      return;
+    }
+
+     if (this.id ) {
+          const existingTask = this.taskService.getTask(this.id );
+          this.taskService.updateTask({
+            ...existingTask,
+            ...this.form.value,
+          });
+        } else {
+          this.taskService.addTask(this.form.value);
+        }
+
     this.router.navigate(["/"]);
   }
 

@@ -10,9 +10,20 @@
         @for(task of tasks(); track task.id){
             <tr>
                 <td>{{task.title}}</td>
-                <td>{{task.createdAt}}</td>
-                <td></td>
+                <td>{{task.createdAt| date}}</td>
+                <td>
+                    <a class="btn btn-primary" [routerLink]="['/update', task.id]">
+                        Update
+                    </a>
+                    <button class="btn btn-error" (click)="deleteTask(task.id!)">
+                        Delete
+                    </button>
+                </td>
             </tr>
         }
+
+      @if (!tasks().length) {
+          <p class="my-5 text-center">No tasks</p>
+  }
     </tbody>
 </table>
