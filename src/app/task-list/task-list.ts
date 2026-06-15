@@ -17,4 +17,9 @@ export class TaskList {
   private taskService = inject(TaskService);
 
   tasks = this.taskService.tasks;
+
+  deleteTask(id:string) {
+   
+      this.taskService.deleteTask(id);
+  }
 }

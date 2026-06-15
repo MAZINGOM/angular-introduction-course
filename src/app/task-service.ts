@@ -39,9 +39,13 @@ export class TaskService {
     return this.tasks().find(task => task.id === id)!;
   }
 
-    updateTask(task: Task) {
+  updateTask(task: Task) {
     this.tasks.update((tasks) => {
      return tasks.map((existingTask) => existingTask.id === task.id ? task : existingTask);
     });
+  }
+
+  deleteTask(id: string) {
+    this.tasks.update((tasks) => tasks.filter((task) => task.id !== id));
   }
 }
