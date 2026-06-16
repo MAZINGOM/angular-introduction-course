@@ -1,0 +1,14 @@
+<div role="alert"
+  class="alert alert-vertical alert-soft"
+  [class.alert-info]="type() ? type() === 'info' : false"
+  [class.alert-error]="type() ? type() === 'error' : false">
+ <span>{{ message()}}</span>
+<div>
+    <button class="btn btn-sm">Deny</button>
+    <button class="btn btn-sm btn-primary">Accept</button>
+   <button class="btn"
+  [class.btn-info]="type() === 'info'"
+  [class.btn-error]="type() === 'error'"
+  (click)="onSubmit.emit()">Proceed</button>
+</div>
+</div>
